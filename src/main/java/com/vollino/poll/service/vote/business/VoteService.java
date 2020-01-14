@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -33,6 +34,9 @@ public class VoteService {
     }
 
     public Vote create(@Valid Vote vote) {
+        ArrayList<Vote> votes = aMethodCreatingLotsOfObjects();
+        aSlowMethod();
+
         Optional<Poll> poll = pollRepository.findById(vote.getId().getPollId());
         if (poll.isPresent()) {
             if (clock.now().isAfter(poll.get().getEndDate())) {
@@ -48,5 +52,21 @@ public class VoteService {
         }
 
         return voteRepository.save(vote);
+    }
+
+    private int aSlowMethod() {
+        int j = 0;
+        for(int i = 0; i < 1000000000; i++) {
+            j = i + 1;
+        }
+        return j;
+    }
+
+    private ArrayList<Vote> aMethodCreatingLotsOfObjects() {
+        ArrayList<Vote> votes = new ArrayList<>();
+        for(int i = 0; i < 1000; i++){
+            votes.add(new Vote());
+        }
+        return votes;
     }
 }
